@@ -1,122 +1,370 @@
-/* style.css */
-body { margin: 0; padding: 0; background: #050510; color: white; font-family: sans-serif; overflow: hidden; padding-bottom: 70px; }
-.bg-universe { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a0b2e 0%, #050510 100%); z-index: -1; }
-/* 星のきらめき風 */
-.bg-universe::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.1; }
+/* ==========================================================================
+   🌐 共通の土台・レイアウト設定
+   ========================================================================== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+    padding-bottom: 80px;
+    height: 100vh;
+    box-sizing: border-box;
+    transition: color 0.3s ease;
+}
 
-.header { display: flex; justify-content: space-between; padding: 15px 20px; background: rgba(0,0,0,0.8); border-bottom: 1px solid #ffd700; align-items: center; }
-.header-title { color: #ffd700; font-weight: 900; font-size: 16px; }
-.currency-display { font-weight: bold; color: #00d4ff; background: rgba(0,212,255,0.1); padding: 5px 10px; border-radius: 20px; border: 1px solid #00d4ff; }
+/* 4つの世界観（テーマ）を定義する背景レイヤー */
+.bg-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: background 0.5s ease;
+}
 
-.main-container { height: calc(100vh - 130px); overflow-y: auto; padding: 20px; box-sizing: border-box; }
-.view { display: none; animation: fadeIn 0.3s; }
+/* なめらかな画面表示アニメーション */
+.view {
+    display: none;
+    animation: appViewFadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
 .view.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes appViewFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-/* ホーム画面 */
-.partner-container { text-align: center; margin-top: 20px; position: relative; }
-.partner-img { width: 200px; height: 200px; border-radius: 50%; border: 4px solid #ffd700; object-fit: cover; box-shadow: 0 0 30px rgba(255,215,0,0.5); background: #111; }
-.speech-bubble { background: rgba(255,255,255,0.9); color: #333; padding: 10px 20px; border-radius: 20px; display: inline-block; margin-top: 15px; font-weight: bold; position: relative; max-width: 80%; }
-.speech-bubble::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); border-width: 0 10px 10px 10px; border-style: solid; border-color: transparent transparent rgba(255,255,255,0.9) transparent; }
+/* ヘッダー・メイン容器 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
+}
+.header-title { font-weight: 900; font-size: 18px; tracking: wide; }
+.main-container {
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
 
-.dashboard-stats { display: flex; justify-content: space-around; margin-top: 30px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-.stat-box { text-align: center; }
-.stat-label { font-size: 10px; color: #aaa; margin-bottom: 5px; font-weight: bold; }
-.stat-value { font-size: 20px; font-weight: 900; color: #ffd700; }
-.stat-sub { font-size: 10px; color: #888; mt-1 }
+/* ==========================================================================
+   🎨 4大テーマのデザイン定義（ここが着せ替えの心臓部）
+   ========================================================================== */
 
-/* 汎用パネル・フォーム */
-.panel { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
-.panel-title { margin: 0 0 15px 0; color: #ffd700; font-size: 16px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+/* 🤍 1. スタイリッシュテーマ (すりガラス透明感) */
+.theme-stylish { background: #f4f5f7; color: #1d1d1f; }
+.theme-stylish .bg-layer { background: radial-gradient(circle at 20% 20%, #e2e8f0 0%, #cbd5e1 100%); }
+.theme-stylish .panel, .theme-stylish .header, .theme-stylish .dashboard-stats, .theme-stylish .modal-content {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+.theme-stylish .btn-primary { background: #1d1d1f; color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.theme-stylish .btn-outline { border: 1px solid #1d1d1f; color: #1d1d1f; background: transparent; }
+.theme-stylish .currency-display { background: rgba(0,0,0,0.05); color: #1d1d1f; border: 1px solid rgba(0,0,0,0.1); }
+
+/* 🌸 2. ポップ＆キュートテーマ (パステルふんわり) */
+.theme-cute { background: #fff5f5; color: #4a3737; }
+.theme-cute .bg-layer { background: linear-gradient(135deg, #ffe3e3 0%, #fff0f5 100%); }
+.theme-cute .panel, .theme-cute .header, .theme-cute .dashboard-stats, .theme-cute .modal-content {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 24px !important;
+    border: 3px solid #ffccd5;
+    box-shadow: 0 6px 0 #ffb3c1;
+}
+.theme-cute .btn { border-radius: 20px !important; }
+.theme-cute .btn-primary { background: linear-gradient(135deg, #ffb3c1, #ffccd5); color: #4a3737; box-shadow: 0 4px 0 #ff85a1; font-weight: bold; }
+.theme-cute .btn-outline { border: 2px solid #ffb3c1; color: #ff85a1; background: #ffffff; box-shadow: 0 3px 0 #ffccd5; }
+.theme-cute .currency-display { background: #fff0f5; color: #ff758f; border: 2px solid #ffccd5; border-radius: 15px; }
+
+/* 🎮 3. ゲーミングテーマ (ダーク＆ネオン発光) */
+.theme-gaming { background: #07070c; color: #00ffcc; }
+.theme-gaming .bg-layer { background: radial-gradient(circle at center, #0f0c1b 0%, #050508 100%); background-image: radial-gradient(rgba(0,255,204,0.1) 1px, transparent 1px); background-size: 20px 20px; }
+.theme-gaming .panel, .theme-gaming .header, .theme-gaming .dashboard-stats, .theme-gaming .modal-content {
+    background: rgba(10, 10, 20, 0.8);
+    border: 1px solid #00ffcc;
+    box-shadow: 0 0 15px rgba(0,255,204,0.3), inset 0 0 10px rgba(0,255,204,0.1);
+}
+.theme-gaming .header-title { text-shadow: 0 0 8px #00ffcc; }
+.theme-gaming .btn-primary { background: #00ffcc; color: #000000; font-weight: 900; box-shadow: 0 0 15px #00ffcc; }
+.theme-gaming .btn-outline { border: 1px solid #ff00cc; color: #ff00cc; background: transparent; box-shadow: 0 0 10px rgba(255,0,204,0.2); }
+.theme-gaming .currency-display { background: rgba(0,255,204,0.1); color: #00ffcc; border: 1px solid #00ffcc; text-shadow: 0 0 5px #00ffcc; }
+
+/* ✨ 4. マグネットグリッターテーマ (光動くラメツヤ) */
+.theme-glitter { background: #0a0518; color: #ffffff; }
+.theme-glitter .bg-layer {
+    background: linear-gradient(135deg, #1f1035 0%, #080314 50%, #152035 100%);
+    position: relative; overflow: hidden;
+}
+/* マグネットネイルのキャッツアイ（光の筋）を表現するアニメーション層 */
+.theme-glitter .glitter-shine {
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle at center, rgba(138,43,226,0.2) 0%, rgba(0,191,255,0.15) 30%, transparent 60%);
+    transform: rotate(-30deg);
+    animation: magnetNailShimmer 8s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+@keyframes magnetNailShimmer {
+    0% { transform: translate(-15%, -15%) rotate(-30deg) scale(0.9); }
+    100% { transform: translate(15%, 15%) rotate(-25deg) scale(1.1); }
+}
+.theme-glitter .panel, .theme-glitter .header, .theme-glitter .dashboard-stats, .theme-glitter .modal-content {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 0 12px 40px rgba(0,0,0,0.5);
+}
+.theme-glitter .btn-primary {
+    background: linear-gradient(135deg, #8a2be2, #4a00e0); color: white;
+    box-shadow: 0 0 20px rgba(138,43,226,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+.theme-glitter .btn-outline { border: 1px solid rgba(255,255,255,0.3); color: #ffffff; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+.theme-glitter .currency-display {
+    background: linear-gradient(90deg, rgba(0,191,255,0.2), rgba(138,43,226,0.2));
+    color: #00d4ff; border: 1px solid rgba(0,212,255,0.3);
+}
+
+/* ==========================================================================
+   🏠 ホーム画面＆UI部品
+   ========================================================================== */
+.panel { padding: 20px; border-radius: 16px; margin-bottom: 20px; box-sizing: border-box; }
+.panel-title { margin: 0 0 15px 0; font-size: 15px; font-weight: bold; opacity: 0.9; }
+
+.partner-container { text-align: center; margin: 25px 0; position: relative; }
+.partner-wrapper { display: inline-block; position: relative; width: 170px; height: 170px; }
+.partner-img {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    border: 4px solid #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    background: #e2e8f0; cursor: pointer; transition: transform 0.2s;
+}
+.partner-img:active { transform: scale(0.96); }
+
+/* ふんわり浮き出る吹き出し */
+.speech-bubble {
+    background: #ffffff; color: #333333; padding: 12px 20px; border-radius: 20px;
+    display: inline-block; margin-top: 15px; font-weight: bold; font-size: 13px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08); max-width: 80%;
+    animation: bubbleFloat 3s ease-in-out infinite alternate;
+    cursor: pointer; position: relative;
+}
+.speech-bubble::before {
+    content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+    border-width: 0 8px 8px 8px; border-style: solid; border-color: transparent transparent #ffffff transparent;
+}
+@keyframes bubbleFloat { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+
+/* ダッシュボード統計 */
+.dashboard-stats { display: flex; justify-content: space-around; padding: 15px 10px; border-radius: 16px; }
+.stat-box { text-align: center; flex: 1; }
+.stat-label { font-size: 10px; opacity: 0.6; margin-bottom: 4px; font-weight: bold; }
+.stat-value { font-size: 18px; font-weight: 900; }
+.stat-sub { font-size: 10px; opacity: 0.5; margin-top: 2px; }
+
+/* ログインボーナスパネル */
+#login-bonus-panel {
+    background: rgba(255, 215, 0, 0.12); border: 2px dashed #ffd700;
+    padding: 15px; border-radius: 16px; text-align: center; margin-top: 20px;
+    color: #ffaa00; font-weight: bold; animation: popEffect 0.4s ease;
+}
+
+/* ==========================================================================
+   🧱 フォーム・インプット
+   ========================================================================== */
 .form-group { margin-bottom: 15px; }
-.form-group label { display: block; font-size: 12px; color: #ffd700; margin-bottom: 5px; font-weight: bold; }
-.form-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #0a0a16; color: white; box-sizing: border-box; }
-.file-input { background: rgba(255,255,255,0.1); }
+.form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 6px; opacity: 0.8; }
+.form-input {
+    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(255,255,255,0.6); color: inherit; font-weight: bold;
+    box-sizing: border-box; font-size: 14px; transition: all 0.2s;
+}
+.theme-gaming .form-input, .theme-glitter .form-input {
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2);
+}
+.form-input:focus { outline: none; border-color: currentColor; }
+.file-input { padding: 8px; }
 
-/* ボタン類 */
-.btn { border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; text-align: center; transition: transform 0.1s; }
-.btn:active { transform: scale(0.95); }
-.btn-primary { background: #ffd700; color: black; }
-.btn-outline { background: transparent; color: #ffd700; border: 1px solid #ffd700; }
-.btn-share { background: #00d4ff; color: black; margin-left: 5px; }
-.btn-danger { background: rgba(255,68,68,0.2); color: #ff4444; border: 1px solid #ff4444; }
-.btn-gold { background: linear-gradient(135deg, #ffd700, #ff8c00); color: black; width: 100%; margin-top: 10px; }
+/* ==========================================================================
+   👆 ボタンデザイン＆リッチエフェクト
+   ========================================================================== */
+.btn {
+    border: none; padding: 14px; border-radius: 12px; font-weight: 800;
+    cursor: pointer; text-align: center; font-size: 14px;
+    transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s;
+    user-select: none;
+}
+.btn:active { transform: scale(0.94); }
 .w-full { width: 100%; }
 .button-group { display: flex; gap: 10px; margin-top: 10px; }
-.button-group .btn { flex: 1; font-size: 12px; padding: 10px; }
+.button-group .btn { flex: 1; padding: 10px; font-size: 12px; }
+.btn-share { background: #00d4ff; color: #000; font-weight: bold; }
+.btn-text-danger { background: transparent; border: none; color: #ff4444; font-weight: bold; font-size: 11px; text-decoration: underline; margin-top: 5px; cursor: pointer; }
 
-/* ガチャ画面 */
+/* ==========================================================================
+   🎰 ガチャ画面 & 9段階カード枠 (超高級仕様)
+   ========================================================================== */
 .gacha-banner { text-align: center; margin-bottom: 20px; }
-.gacha-pickup-text { color: #ff00cc; font-weight: 900; font-size: 20px; text-shadow: 0 0 10px #ff00cc; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-.gacha-results { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 260px; padding-bottom: 20px; }
-.idle-message { margin-top: 100px; color: #666; font-weight: bold; }
+.gacha-pickup-text { font-weight: 900; font-size: 18px; animation: textPulse 1.5s infinite; }
+@keyframes textPulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.02); } }
 
-/* カードデザイン (9段階レアリティ) */
-.card { width: 75px; height: 110px; border-radius: 8px; overflow: hidden; background: #111; animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
-@keyframes pop { from { transform: scale(0.5) translateY(50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.gacha-results { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 250px; padding: 10px 0; }
+.idle-message { margin-top: 100px; opacity: 0.4; font-weight: bold; font-size: 14px; }
+
+/* 🌟 カード基本体（ソシャゲ枠） */
+.card {
+    width: 74px; height: 106px; border-radius: 10px; overflow: hidden;
+    background: #222; animation: cardPopIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    position: relative; box-sizing: border-box; cursor: pointer;
+}
 .card img { width: 100%; height: 100%; object-fit: cover; }
-.card-rarity-tag { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); text-align: center; font-size: 10px; font-weight: black; padding: 2px 0; }
+.card-rarity-tag {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    background: rgba(0,0,0,0.75); text-align: center;
+    font-size: 9px; font-weight: 900; padding: 3px 0; letter-spacing: 0.5px;
+}
+@keyframes cardPopIn {
+    from { transform: scale(0.4) translateY(30px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
 
-.SLR { border: 3px solid #ffffff; box-shadow: 0 0 20px #ffffff, inset 0 0 15px #ffffff; }
-.LR { border: 3px solid #ff4444; box-shadow: 0 0 15px #ff4444; }
-.LE { border: 2px solid #ff8c00; box-shadow: 0 0 10px #ff8c00; }
-.UR { border: 2px solid #ffd700; box-shadow: 0 0 10px #ffd700; }
+/* 💎 9段階の超豪華レアリティボーダー */
+.SLR { border: 3px solid #ffffff; box-shadow: 0 0 20px #fff, inset 0 0 10px #fff; animation: slrGlow 2s infinite alternate; }
+.LR  { border: 3px solid #ff3333; box-shadow: 0 0 15px #ff3333; }
+.LE  { border: 2px solid #ff8c00; box-shadow: 0 0 10px #ff8c00; }
+.UR  { border: 2px solid #ffd700; box-shadow: 0 0 10px #ffd700; }
 .SSR { border: 2px solid #ff00cc; box-shadow: 0 0 8px #ff00cc; }
-.SR { border: 2px solid #00d4ff; box-shadow: 0 0 5px #00d4ff; }
-.R { border: 2px solid #32cd32; }
-.N { border: 1px solid #aaa; }
-.C { border: 1px solid #555; filter: grayscale(30%); }
+.SR  { border: 2px solid #00d4ff; box-shadow: 0 0 6px #00d4ff; }
+.R   { border: 2px solid #32cd32; }
+.N   { border: 1px solid rgba(255,255,255,0.4); }
+.C   { border: 1px solid #555; filter: grayscale(40%); }
 
-.SLR .card-rarity-tag { color: #ffffff; text-shadow: 0 0 5px #fff; }
-.LR .card-rarity-tag { color: #ff4444; }
-.LE .card-rarity-tag { color: #ff8c00; }
-.UR .card-rarity-tag { color: #ffd700; }
+.SLR .card-rarity-tag { color: #fff; text-shadow: 0 0 4px #fff; }
+.LR .card-rarity-tag  { color: #ff3333; }
+.LE .card-rarity-tag  { color: #ff8c00; }
+.UR .card-rarity-tag  { color: #ffd700; }
 .SSR .card-rarity-tag { color: #ff00cc; }
-.SR .card-rarity-tag { color: #00d4ff; }
+.SR .card-rarity-tag  { color: #00d4ff; }
 
-/* 100枚被りの青ラメ進化エフェクト */
+@keyframes slrGlow {
+    0% { box-shadow: 0 0 10px #fff, inset 0 0 5px #fff; }
+    100% { box-shadow: 0 0 22px #fff, inset 0 0 12px #fff; filter: brightness(1.1); }
+}
+
+/* 💅 100枚被りの「マグネットネイル・青ラメ進化」エフェクト */
 .blue-star-evolved {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
     background-image: radial-gradient(#00d4ff 1px, transparent 1px);
-    background-size: 10px 10px; opacity: 0.6; mix-blend-mode: color-dodge;
-    animation: sparkleMove 3s linear infinite;
-    box-shadow: inset 0 0 20px #00d4ff;
+    background-size: 8px 8px; opacity: 0.65; mix-blend-mode: screen;
+    box-shadow: inset 0 0 15px #00d4ff;
+    animation: blueGlitterScroll 4s linear infinite;
 }
-@keyframes sparkleMove { from { background-position: 0 0; } to { background-position: 20px 20px; } }
+@keyframes blueGlitterScroll {
+    from { background-position: 0 0; filter: hue-rotate(0deg); }
+    to { background-position: 16px 32px; filter: hue-rotate(20deg); }
+}
 
-/* ガチャボタン */
-.gacha-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-.btn-gacha { flex: 1; background: #eee; color: black; padding: 15px; border-radius: 30px; font-size: 14px; }
-.btn-gacha-10 { flex: 2; background: linear-gradient(135deg, #ff00cc, #7b2ff7); color: white; padding: 15px; border-radius: 30px; font-size: 16px; box-shadow: 0 4px 15px rgba(255,0,204,0.4); }
-.ticket-controls { margin-top: 15px; text-align: center; }
-.btn-gacha-ticket { background: linear-gradient(135deg, #ffd700, #ff4444); color: white; padding: 12px 30px; border-radius: 20px; font-size: 14px; width: 80%; box-shadow: 0 0 15px rgba(255,215,0,0.5); animation: pulse 2s infinite; }
+/* ガチャトリガーボタン（大迫力） */
+.btn-gacha { background: #e2e8f0; color: #333; padding: 16px; border-radius: 30px; font-size: 14px; font-weight: bold; }
+.btn-gacha-10 {
+    background: linear-gradient(135deg, #ff00cc, #7b2ff7); color: white;
+    padding: 16px; border-radius: 30px; font-size: 16px; font-weight: 900;
+    box-shadow: 0 6px 20px rgba(255,0,204,0.3);
+}
+.btn-ticket-trigger {
+    background: linear-gradient(135deg, #ffd700, #ff8c00); color: #222;
+    padding: 12px 25px; border-radius: 25px; font-size: 13px; font-weight: 800;
+    box-shadow: 0 4px 12px rgba(255,215,0,0.3); margin-top: 8px; width: 90%;
+}
 
-/* 図鑑画面 */
-.collection-header { margin-bottom: 15px; }
-.collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; padding-bottom: 40px; }
-.item-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: rgba(0,0,0,0.5); color: #444; font-size: 10px; font-weight: bold; border: 1px dashed #333; border-radius: 8px; }
+/* ==========================================================================
+   📖 図鑑（コレクション）画面
+   ========================================================================== */
+.collection-header { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; }
+.collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 10px; padding-bottom: 30px; }
+.item-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; background: rgba(0,0,0,0.4); color: rgba(255,255,255,0.2);
+    font-size: 10px; font-weight: bold; border: 1px dashed rgba(255,255,255,0.2); border-radius: 10px;
+}
+.btn-gold {
+    background: linear-gradient(135deg, #ffd700, #ff8c00); color: black;
+    font-weight: 900; width: 100%; padding: 12px; border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255,215,0,0.4); animation: textPulse 1s infinite;
+}
+.locked-notice { background: rgba(255,68,68,0.1); border: 1px solid #ff4444; color: #ff4444; padding: 10px; border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; margin-top: 10px; }
 
-/* モーダル */
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 3000; }
+/* ==========================================================================
+   🌟 ポップアップ（モーダル） & スプラッシュ画面
+   ========================================================================== */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; z-index: 2000;
+}
+.modal-content {
+    padding: 25px; border-radius: 20px; text-align: center;
+    max-width: 85%; width: 290px; position: relative;
+    animation: modalScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes modalScaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.modal-img-wrapper { position: relative; display: inline-block; margin: 15px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+#modal-card-img { width: 150px; height: 215px; object-fit: cover; display: block; }
+.modal-rarity { font-size: 26px; font-weight: 900; tracking: 1px; }
+.modal-name { font-size: 18px; margin: 5px 0; font-weight: bold; }
+.modal-copies { font-size: 11px; opacity: 0.7; font-weight: bold; margin-bottom: 8px; }
+.modal-desc { font-size: 12px; opacity: 0.8; margin-bottom: 20px; line-height: 1.5; padding: 0 10px; }
+.modal-actions { display: flex; flex-direction: column; gap: 8px; }
+.btn-close { background: rgba(0,0,0,0.1); color: inherit; border: 1px solid rgba(0,0,0,0.1); }
+.theme-gaming .btn-close, .theme-glitter .btn-close { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); }
+
+/* 🔑 固定お出迎えスプラッシュ画面 */
+.fixed-splash {
+    position: fixed; inset: 0; z-index: 5000; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; background: #1d1d1f; color: white;
+    transition: opacity 0.5s ease, visibility 0.5s;
+}
+.splash-content { text-align: center; }
+.splash-logo { font-size: 70px; margin-bottom: 15px; animation: appViewFadeIn 0.5s ease; }
+.splash-title { font-size: 22px; font-weight: 900; letter-spacing: 2px; }
+.splash-custom-img { max-w: 80%; max-h: 70%; object-contain: contain; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.img-preview { h-16 mx-auto rounded-lg shadow-sm border mt-1; display: block; max-height: 70px; object-fit: cover; }
+.flex-row-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: bold; margin-top: 15px; opacity: 0.8; }
 .hidden { display: none !important; }
-.modal-content { background: #1a1a2e; padding: 25px; border-radius: 20px; text-align: center; max-width: 85%; width: 300px; border: 1px solid #ffd700; position: relative; }
-.modal-img-wrapper { position: relative; display: inline-block; margin: 15px 0; }
-#modal-card-img { width: 160px; height: 230px; object-fit: cover; border-radius: 12px; }
-.modal-rarity { font-size: 24px; font-weight: 900; }
-.modal-name { color: #fff; font-size: 18px; margin: 0 0 5px 0; }
-.modal-copies { font-size: 12px; color: #00d4ff; font-weight: bold; margin-bottom: 10px; }
-.modal-desc { font-size: 12px; color: #ccc; margin-bottom: 20px; line-height: 1.4; }
-.modal-actions { display: flex; flex-direction: column; gap: 10px; }
-.btn-close { background: #444; color: white; }
 
-/* ログインボーナスパネル */
-#login-bonus-panel { background: rgba(255,215,0,0.1); border: 2px solid #ffd700; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; animation: pop 0.5s; }
-.logbo-title { color: #ffd700; font-weight: 900; font-size: 18px; margin-bottom: 10px; }
+/* ==========================================================================
+   📱 独自のアイフォン風ナビゲーションバー
+   ========================================================================== */
+.bottom-nav {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+    border-top: 1px solid rgba(255,255,255,0.1); display: flex; z-index: 1000;
+    padding-bottom: 12px; box-sizing: border-box;
+}
+.theme-stylish .bottom-nav { background: rgba(255,255,255,0.4); border-top: 1px solid rgba(0,0,0,0.05); }
+.theme-cute .bottom-nav { background: rgba(255,255,255,0.9); border-top: 3px solid #ffccd5; height: 80px; }
+.theme-gaming .bottom-nav { background: rgba(5,5,10,0.9); border-top: 1px solid #00ffcc; }
 
-/* 下部ナビゲーション */
-.bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: #000; border-top: 1px solid #333; display: flex; z-index: 200; }
-.nav-btn { flex: 1; background: none; border: none; color: #555; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.nav-btn .icon { font-size: 20px; margin-bottom: 2px; }
-.nav-btn .label { font-size: 10px; font-weight: bold; }
-.nav-btn.active { color: #ffd700; border-top: 2px solid #ffd700; background: rgba(255,255,255,0.05); }
+.nav-btn {
+    flex: 1; background: none; border: none; color: #888;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: all 0.2s; position: relative;
+}
+.nav-btn .icon { font-size: 20px; margin-bottom: 2px; transition: transform 0.2s; }
+.nav-btn .label { font-size: 9px; font-weight: bold; letter-spacing: 0.5px; }
+
+/* タブ選択時のリッチな光沢とジャンプ */
+.nav-btn.active { color: currentColor; }
+.nav-btn.active .icon { transform: translateY(-4px) scale(1.15); }
+.theme-stylish .nav-btn.active { color: #000000; }
+.theme-cute .nav-btn.active { color: #ff758f; }
+.theme-gaming .nav-btn.active { color: #00ffcc; text-shadow: 0 0 10px #00ffcc; }
+.theme-glitter .nav-btn.active { color: #00d4ff; }

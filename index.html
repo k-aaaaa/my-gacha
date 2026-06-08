@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="icon.png">
     <title>MY GACHA MAKER</title>
     <link rel="stylesheet" href="style.css">
-    <!-- 豪華な紙吹雪エフェクト用ライブラリ -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body>
-    <!-- 宇宙のようなキラキラ背景 -->
-    <div class="bg-universe" id="main-bg"></div>
+<body class="theme-stylish"> <div id="splash" class="fixed-splash">
+        <div id="splash-default" class="splash-content">
+            <div class="splash-logo">🎰</div>
+            <h1 class="splash-title">MY GACHA MAKER</h1>
+        </div>
+        <img id="splash-custom" class="splash-custom-img hidden" src="" alt="Welcome">
+    </div>
 
-    <!-- ヘッダー（上部メニュー） -->
+    <div class="bg-layer" id="main-bg">
+        <div class="glitter-shine"></div>
+    </div>
+
     <header class="header">
         <div class="header-title" id="current-gacha-title">ガチャメーカー</div>
         <div class="header-status">
@@ -20,14 +28,15 @@
         </div>
     </header>
 
-    <!-- メイン画面の切り替えエリア -->
     <main class="main-container">
 
-        <!-- 🏠 1. ホーム画面 -->
         <section id="view-home" class="view active">
             <div class="partner-container">
-                <img id="home-partner-img" src="" alt="相棒" class="partner-img">
-                <div class="speech-bubble" id="home-message">今日も一緒にがんばろう！</div>
+                <div class="partner-wrapper">
+                    <img id="home-partner-img" src="" alt="相棒" class="partner-img" onclick="triggerPartnerSpeech()">
+                    <div class="blue-star-evolved hidden" id="home-partner-star"></div>
+                </div>
+                <div class="speech-bubble" id="home-message" onclick="triggerPartnerSpeech()">今日も一緒にがんばろう！</div>
             </div>
             
             <div class="dashboard-stats">
@@ -47,22 +56,21 @@
                     <div class="stat-sub">💎</div>
                 </div>
             </div>
-            <!-- ログインボーナス獲得時の演出用パネル -->
             <div id="login-bonus-panel" class="hidden"></div>
         </section>
 
-        <!-- ⚙️ 2. ガチャを作る・管理する画面 -->
         <section id="view-admin" class="view">
             <div class="panel">
                 <h2 class="panel-title">📦 ガチャの切り替え・新規作成</h2>
                 <select id="gacha-selector" class="form-input"></select>
                 <div class="button-group">
-                    <button id="btn-create-new-gacha" class="btn btn-outline">＋ 新しいガチャを作る</button>
-                    <button id="btn-share-gacha" class="btn btn-share">🔗 このガチャを友達に送る</button>
+                    <button id="btn-create-new-gacha" class="btn btn-outline">＋ 新規ガチャ</button>
+                    <button id="btn-share-gacha" class="btn btn-share">🔗 友達に送る</button>
                 </div>
+                <div id="gacha-locked-notice" class="locked-notice hidden">🔒 このガチャは殿堂入りロックされています</div>
             </div>
 
-            <div class="panel">
+            <div class="panel" id="card-create-panel">
                 <h2 class="panel-title">🖼️ 推しカードの実装（追加）</h2>
                 <div class="form-group">
                     <label>スマホの画像を選ぶ</label>
@@ -88,52 +96,93 @@
                 </div>
                 <div class="form-group">
                     <label>セリフ・説明文（空欄OK）</label>
-                    <input type="text" id="input-card-desc" placeholder="排出時のセリフを入力" class="form-input">
+                    <input type="text" id="input-card-desc" placeholder="排出時や相棒設定時のセリフ" class="form-input">
                 </div>
                 <button id="btn-add-card" class="btn btn-primary w-full">ガチャに実装する！</button>
             </div>
-            
         </section>
 
-        <!-- 🎰 3. ガチャを引く画面 -->
         <section id="view-gacha" class="view">
             <div class="gacha-banner">
-                <div class="gacha-pickup-text">最高レアを引き当てろ！</div>
+                <div class="gacha-pickup-text" id="gacha-screen-status">最高レアを引き当てろ！</div>
             </div>
             
             <div id="gacha-result-container" class="gacha-results">
                 <div class="idle-message">✨ 奇跡を求めて ✨</div>
             </div>
             
-            <div class="gacha-controls">
+            <div class="gacha-controls" id="gacha-action-controls">
                 <button id="btn-pull-1" class="btn btn-gacha">単発 (💎30)</button>
                 <button id="btn-pull-10" class="btn btn-gacha-10">10連 (💎300)</button>
             </div>
-            <div class="ticket-controls">
-                <button id="btn-pull-ticket" class="btn btn-gacha-ticket hidden">🎫 確定チケットで引く！</button>
-            </div>
+            <div class="ticket-controls" id="ticket-action-controls">
+                </div>
         </section>
 
-        <!-- 📖 4. 図鑑 (ミュージアム) 画面 -->
         <section id="view-collection" class="view">
             <div class="collection-header">
                 <select id="collection-gacha-selector" class="form-input"></select>
                 <button id="btn-hall-of-fame" class="btn btn-gold hidden">🏆 コンプリート！殿堂入りさせる</button>
             </div>
-            <div id="collection-grid" class="collection-grid">
-                <!-- 獲得したカードがここに並びます -->
+            <div id="collection-grid" class="collection-grid"></div>
+        </section>
+
+        <section id="view-settings" class="view">
+            <div class="panel">
+                <h2 class="panel-title">🎨 アプリのテーマ着せ替え</h2>
+                <div class="form-group">
+                    <select id="theme-selector" class="form-input" onchange="changeAppTheme(this.value)">
+                        <option value="theme-stylish">🤍 スタイリッシュ (すりガラス透明感)</option>
+                        <option value="theme-cute">🌸 ポップ＆キュート (パステルふんわり)</option>
+                        <option value="theme-gaming">🎮 ゲーミング (ダーク＆ネオン発光)</option>
+                        <option value="theme-glitter">✨ マグネットグリッター (光動くラメツヤ)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2 class="panel-title">🖼️ お出迎え画面・タイトル設定</h2>
+                <div class="form-group">
+                    <label>お出迎え画像を選ぶ</label>
+                    <input type="file" id="settings-welcome-img" accept="image/*" class="form-input file-input" onchange="saveWelcomeImage(event)">
+                </div>
+                <div class="form-group">
+                    <label>表示時間</label>
+                    <select id="settings-splash-time" class="form-input" onchange="saveSplashTime(this.value)">
+                        <option value="500">サクッと (0.5秒)</option>
+                        <option value="1200" selected>普通 (1.2秒)</option>
+                        <option value="2500">じっくり (2.5秒)</option>
+                    </select>
+                </div>
+                <div id="welcome-img-preview-container" class="hidden text-center">
+                    <img id="welcome-img-preview" class="img-preview" src="">
+                    <button onclick="clearWelcomeImage()" class="btn-text-danger">画像を消去する</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2 class="panel-title">☁️ クラウド同期・バックアップ (GAS)</h2>
+                <div class="form-group">
+                    <input type="text" id="gas-url" class="form-input text-xs" placeholder="GASのウェブアプリURLを貼り付け">
+                </div>
+                <div class="button-group">
+                    <button onclick="saveGasUrl()" class="btn btn-outline" style="font-size:12px;">URL保存</button>
+                    <button onclick="triggerManualSync()" class="btn btn-share" style="font-size:12px;">☁️ 手動バックアップ</button>
+                </div>
+                <label class="flex-row-label">
+                    <input type="checkbox" id="settings-auto-sync" onchange="toggleAutoSync(this.checked)"> 操作時に自動バックアップを行う
+                </label>
             </div>
         </section>
 
     </main>
 
-    <!-- 🌟 カード詳細表示用ポップアップ（モーダル） -->
     <div id="modal-card-detail" class="modal hidden">
         <div class="modal-content">
             <div id="modal-card-rarity" class="modal-rarity"></div>
             <div class="modal-img-wrapper">
                 <img id="modal-card-img" src="" alt="Card">
-                <div id="modal-card-stars" class="modal-stars"></div> <!-- 100枚被りの青ラメ星 -->
+                <div id="modal-card-stars" class="modal-stars"></div>
             </div>
             <h2 id="modal-card-name" class="modal-name"></h2>
             <div class="modal-copies">所持数: <span id="modal-card-count">0</span>枚</div>
@@ -146,7 +195,6 @@
         </div>
     </div>
 
-    <!-- 🎁 URLからガチャを受け取った時のポップアップ -->
     <div id="modal-import" class="modal hidden">
         <div class="modal-content">
             <h2>🎁 ガチャが届きました！</h2>
@@ -158,15 +206,14 @@
         </div>
     </div>
 
-    <!-- 📱 下部ナビゲーションメニュー -->
     <nav class="bottom-nav">
         <button class="nav-btn active" data-target="view-home"><span class="icon">🏠</span><br><span class="label">ホーム</span></button>
         <button class="nav-btn" data-target="view-admin"><span class="icon">⚙️</span><br><span class="label">作る</span></button>
         <button class="nav-btn" data-target="view-gacha"><span class="icon">🎰</span><br><span class="label">ガチャ</span></button>
         <button class="nav-btn" data-target="view-collection"><span class="icon">📖</span><br><span class="label">図鑑</span></button>
+        <button class="nav-btn" data-target="view-settings"><span class="icon">🛠️</span><br><span class="label">設定</span></button>
     </nav>
 
-    <!-- アプリを動かす魔法のスクリプト -->
     <script src="app.js"></script>
 </body>
 </html>

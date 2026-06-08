@@ -64,11 +64,12 @@
 
         <section id="view-admin" class="view">
             <div class="panel">
-                <h2 class="panel-title">📦 ガチャの切り替え・新規作成</h2>
+                <h2 class="panel-title">📦 ガチャの切り替え・管理</h2>
                 <select id="gacha-selector" class="form-input"></select>
                 <div class="button-group">
-                    <button id="btn-create-new-gacha" class="btn btn-outline">＋ 新規ガチャ</button>
-                    <button id="btn-share-gacha" class="btn btn-share">🔗 友達に送る</button>
+                    <button id="btn-create-new-gacha" class="btn btn-outline">＋ 新規</button>
+                    <button id="btn-share-gacha" class="btn btn-share">🔗 シェア</button>
+                    <button id="btn-delete-gacha" class="btn btn-outline" style="border-color:#ff4444; color:#ff4444;">🗑️ 削除</button>
                 </div>
                 <div id="gacha-locked-notice" class="locked-notice hidden">🔒 このガチャは殿堂入りロックされています</div>
             </div>
@@ -86,11 +87,11 @@
                 <div class="form-group">
                     <label>レアリティ (全9段階)</label>
                     <select id="input-card-rarity" class="form-input">
-                        <option value="SLR">SLR (シークレットレジェンドレア: 0.01%)</option>
+                        <option value="SLR">SLR (シークレットレジェンド: 0.01%)</option>
                         <option value="LR">LR (レジェンドレア: 0.04%)</option>
                         <option value="LE">LE (レジェンドエディション: 0.15%)</option>
                         <option value="UR">UR (ウルトラレア: 0.5%)</option>
-                        <option value="SSR">SSR (スペシャルスーパーレア: 3.8%)</option>
+                        <option value="SSR">SSR (スペシャルスーパー: 3.8%)</option>
                         <option value="SR">SR (スーパーレア: 10.5%)</option>
                         <option value="R">R (レア: 20%)</option>
                         <option value="N" selected>N (ノーマル: 50%)</option>
@@ -114,6 +115,8 @@
                 <div class="idle-message">✨ 奇跡を求めて ✨</div>
             </div>
             
+            <button id="btn-share-pull-result" class="btn btn-share w-full hidden" style="margin-bottom: 15px;" onclick="sharePullResult()">📋 今回のガチャ結果をコピー</button>
+
             <div class="gacha-controls" id="gacha-action-controls">
                 <button id="btn-pull-1" class="btn btn-gacha">単発 (💎30)</button>
                 <button id="btn-pull-10" class="btn btn-gacha-10">10連 (💎300)</button>
@@ -124,12 +127,18 @@
         <section id="view-collection" class="view">
             <div class="collection-header">
                 <select id="collection-gacha-selector" class="form-input"></select>
+                <div class="form-row">
+                    <select id="collection-sort-selector" class="form-input flex-1" onchange="renderCollection()">
+                        <option value="rarity">✨ レアリティ順</option>
+                        <option value="newest">🆕 新しく追加された順</option>
+                    </select>
+                </div>
                 <button id="btn-hall-of-fame" class="btn btn-gold hidden">🏆 コンプリート！殿堂入りさせる</button>
             </div>
             <div id="collection-grid" class="collection-grid"></div>
         </section>
 
-        <section id="view-settings" class="view">
+        <section id="view-settings" class="view space-y">
             <div class="panel">
                 <h2 class="panel-title">🎨 アプリのテーマ着せ替え</h2>
                 <div class="form-group">
@@ -163,9 +172,9 @@
             </div>
 
             <div class="panel">
-                <h2 class="panel-title">🖼️ お出迎え画面・タイトル設定</h2>
+                <h2 class="panel-title">🖼️ お出迎え画面設定</h2>
                 <div class="form-group">
-                    <label>お出迎え画像を選ぶ</label>
+                    <label>画像を選ぶ</label>
                     <input type="file" id="settings-welcome-img" accept="image/*" class="form-input file-input" onchange="saveWelcomeImage(event)">
                 </div>
                 <div class="form-group">
@@ -193,7 +202,7 @@
             <div class="panel">
                 <h2 class="panel-title">☁️ クラウド同期・バックアップ (GAS)</h2>
                 <div class="form-group">
-                    <input type="text" id="gas-url" class="form-input text-xs" placeholder="GASのウェブアプリURLを貼り付け">
+                    <input type="text" id="gas-url" class="form-input text-xs" placeholder="GASのURLを貼り付け">
                 </div>
                 <div class="button-group">
                     <button onclick="saveGasUrl()" class="btn btn-outline" style="font-size:12px;">URL保存</button>
@@ -204,6 +213,7 @@
                 </label>
             </div>
         </section>
+
     </main>
 
     <div id="modal-card-detail" class="modal hidden">
@@ -226,7 +236,7 @@
     <div id="modal-import" class="modal hidden">
         <div class="modal-content">
             <h2>🎁 ガチャが届きました！</h2>
-            <p>お友達から新しいガチャデータを受け取りました。あなたのアプリに追加しますか？</p>
+            <p>お友達から新しいガチャデータを受け取りました。追加しますか？</p>
             <div class="modal-actions">
                 <button id="btn-import-yes" class="btn btn-primary">インポートする！</button>
                 <button id="btn-import-no" class="btn btn-outline">やめる</button>

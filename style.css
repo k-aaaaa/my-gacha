@@ -45,7 +45,7 @@ body {
 .theme-stylish .panel, .theme-stylish .header, .theme-stylish .dashboard-stats, .theme-stylish .modal-content { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
 .theme-stylish .btn-primary { background: var(--stylish-primary); color: #ffffff; }
 .theme-stylish .btn-outline { border: 1px solid var(--stylish-text); color: var(--stylish-text); background: transparent; }
-.theme-stylish .currency-display { background: rgba(0,0,0,0.05); color: var(--stylish-text); border: 1px solid rgba(0,0,0,0.1); }
+.theme-stylish .currency-display { background: rgba(0,0,0,0.05); color: var(--stylish-text); border: 1px solid rgba(0,0,0,0.1); padding: 4px 10px; border-radius: 12px; font-weight: bold; }
 
 /* 🌸 キュート */
 .theme-cute { background: #fff5f5; color: var(--cute-text); }
@@ -54,7 +54,7 @@ body {
 .theme-cute .btn { border-radius: 20px !important; }
 .theme-cute .btn-primary { background: var(--cute-primary); color: var(--cute-text); box-shadow: 0 4px 0 #ff85a1; font-weight: bold; }
 .theme-cute .btn-outline { border: 2px solid #ffccd5; color: #ff85a1; background: #ffffff; box-shadow: 0 3px 0 #ffccd5; }
-.theme-cute .currency-display { background: #fff0f5; color: #ff758f; border: 2px solid #ffccd5; border-radius: 15px; }
+.theme-cute .currency-display { background: #fff0f5; color: #ff758f; border: 2px solid #ffccd5; border-radius: 15px; padding: 4px 10px; font-weight: bold; }
 
 /* 🎮 ゲーミング */
 .theme-gaming { background: #07070c; color: var(--gaming-text); }
@@ -63,7 +63,7 @@ body {
 .theme-gaming .header-title { text-shadow: 0 0 8px var(--gaming-text); }
 .theme-gaming .btn-primary { background: var(--gaming-primary); color: #000000; font-weight: 900; box-shadow: 0 0 15px var(--gaming-primary); }
 .theme-gaming .btn-outline { border: 1px solid #ff00cc; color: #ff00cc; background: transparent; }
-.theme-gaming .currency-display { background: rgba(0,255,204,0.1); color: var(--gaming-text); border: 1px solid var(--gaming-text); }
+.theme-gaming .currency-display { background: rgba(0,255,204,0.1); color: var(--gaming-text); border: 1px solid var(--gaming-text); padding: 4px 10px; border-radius: 12px; font-weight: bold; }
 
 /* ✨ マグネットグリッター（超軽量3D処理・キャッツアイ効果） */
 .theme-glitter { background: #060214; color: var(--glitter-text); }
@@ -85,11 +85,12 @@ body {
 .theme-glitter .panel, .theme-glitter .header, .theme-glitter .dashboard-stats, .theme-glitter .modal-content { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 12px 40px rgba(0,0,0,0.5); }
 .theme-glitter .btn-primary { background: var(--glitter-primary); color: white; box-shadow: 0 4px 15px rgba(138,43,226,0.4); }
 .theme-glitter .btn-outline { border: 1px solid rgba(255,255,255,0.3); color: var(--glitter-text); background: rgba(255,255,255,0.05); }
-.theme-glitter .currency-display { background: rgba(0,191,255,0.15); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); }
+.theme-glitter .currency-display { background: rgba(0,191,255,0.15); color: #00d4ff; border: 1px solid rgba(0,212,255,0.3); padding: 4px 10px; border-radius: 12px; font-weight: bold; }
 
 /* ==========================================================================
    🧱 UIコンポーネント
    ========================================================================== */
+.space-y > * { margin-bottom: 20px; }
 .panel { padding: 20px; border-radius: 16px; margin-bottom: 20px; box-sizing: border-box; }
 .panel-title { margin: 0 0 15px 0; font-size: 15px; font-weight: bold; opacity: 0.9; }
 
@@ -100,6 +101,8 @@ body {
 
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 6px; opacity: 0.8; }
+.form-row { display: flex; gap: 10px; }
+.flex-1 { flex: 1; }
 .form-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.6); color: inherit; font-weight: bold; box-sizing: border-box; font-size: 14px; transition: all 0.2s; }
 .theme-gaming .form-input, .theme-glitter .form-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); }
 .form-input:focus { outline: none; border-color: currentColor; }
@@ -167,7 +170,7 @@ body {
 .btn-gacha { background: #e2e8f0; color: #333; padding: 16px; border-radius: 30px; font-size: 14px; font-weight: bold; width: 48%; }
 .btn-gacha-10 { background: linear-gradient(135deg, #ff00cc, #7b2ff7); color: white; padding: 16px; border-radius: 30px; font-size: 16px; font-weight: 900; box-shadow: 0 6px 20px rgba(255,0,204,0.3); width: 48%; }
 .gacha-controls { display: flex; justify-content: space-between; }
-.btn-ticket-trigger { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #222; padding: 12px 25px; border-radius: 25px; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(255,215,0,0.3); margin-top: 8px; width: 90%; border: none; cursor: pointer; }
+.btn-ticket-trigger { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #222; padding: 12px 25px; border-radius: 25px; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(255,215,0,0.3); margin-top: 8px; width: 100%; border: none; cursor: pointer; }
 
 /* ==========================================================================
    📖 図鑑 & モーダル

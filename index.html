@@ -183,6 +183,14 @@
             </div>
 
             <div class="panel">
+                <h2 class="panel-title">🔑 パスワードの変更</h2>
+                <div class="form-group">
+                    <input type="password" id="settings-password" class="form-input" placeholder="新しい4桁の数字">
+                </div>
+                <button onclick="savePasswordOnly()" class="btn btn-outline w-full">パスワードを変更</button>
+            </div>
+
+            <div class="panel">
                 <h2 class="panel-title">☁️ クラウド同期・バックアップ (GAS)</h2>
                 <div class="form-group">
                     <input type="text" id="gas-url" class="form-input text-xs" placeholder="GASのウェブアプリURLを貼り付け">
@@ -196,7 +204,6 @@
                 </label>
             </div>
         </section>
-
     </main>
 
     <div id="modal-card-detail" class="modal hidden">
@@ -209,7 +216,6 @@
             <h2 id="modal-card-name" class="modal-name"></h2>
             <div class="modal-copies">所持数: <span id="modal-card-count">0</span>枚</div>
             <p id="modal-card-desc" class="modal-desc"></p>
-            
             <div class="modal-actions">
                 <button id="btn-set-partner" class="btn btn-outline">🏠 ホームの相棒にする</button>
                 <button id="btn-close-modal" class="btn btn-close">閉じる</button>

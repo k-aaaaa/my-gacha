@@ -11,6 +11,7 @@
 </head>
 <body class="theme-stylish">
     
+    <!-- ⚙️ スプラッシュ（お出迎え）画面 -->
     <div id="splash" class="fixed-splash">
         <div id="splash-default" class="splash-content">
             <div class="splash-logo">🎰</div>
@@ -19,11 +20,10 @@
         <img id="splash-custom" class="splash-custom-img hidden" src="" alt="Welcome">
     </div>
 
-    <div class="bg-layer" id="main-bg">
-        <div class="glitter-shine"></div>
-        <div class="glitter-shine-overlay"></div>
-    </div>
+    <!-- 背景レイヤー -->
+    <div class="bg-layer" id="main-bg"></div>
 
+    <!-- ヘッダー -->
     <header class="header">
         <div class="header-title" id="current-gacha-title">ガチャメーカー</div>
         <div class="header-status">
@@ -31,8 +31,10 @@
         </div>
     </header>
 
+    <!-- メインコンテンツ -->
     <main class="main-container">
 
+        <!-- 🏠 1. ホーム画面 -->
         <section id="view-home" class="view active">
             <div class="partner-container">
                 <div class="partner-wrapper">
@@ -51,25 +53,25 @@
                 <div class="stat-box">
                     <div class="stat-label">通算ログイン</div>
                     <div class="stat-value"><span id="login-days">0</span>日</div>
-                    <div class="stat-sub">毎日リセット</div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">消費した石</div>
                     <div class="stat-value" id="total-spent-stones">0</div>
-                    <div class="stat-sub">💎</div>
                 </div>
             </div>
             <div id="login-bonus-panel" class="hidden"></div>
         </section>
 
+        <!-- ⚙️ 2. ガチャを作る・管理する画面 -->
         <section id="view-admin" class="view">
             <div class="panel">
                 <h2 class="panel-title">📦 ガチャの切り替え・管理</h2>
                 <select id="gacha-selector" class="form-input"></select>
                 <div class="button-group">
                     <button id="btn-create-new-gacha" class="btn btn-outline">＋ 新規</button>
-                    <button id="btn-share-gacha" class="btn btn-share">🔗 シェア</button>
-                    <button id="btn-delete-gacha" class="btn btn-outline" style="border-color:#ff4444; color:#ff4444;">🗑️ 削除</button>
+                    <!-- GASを利用したサプライズシェア -->
+                    <button id="btn-share-gacha-gas" class="btn btn-share">🔗 シェア</button>
+                    <button id="btn-delete-gacha" class="btn btn-outline btn-danger">🗑️ 削除</button>
                 </div>
                 <div id="gacha-locked-notice" class="locked-notice hidden">🔒 このガチャは殿堂入りロックされています</div>
             </div>
@@ -87,15 +89,15 @@
                 <div class="form-group">
                     <label>レアリティ (全9段階)</label>
                     <select id="input-card-rarity" class="form-input">
-                        <option value="SLR">SLR (シークレットレジェンド: 0.01%)</option>
-                        <option value="LR">LR (レジェンドレア: 0.04%)</option>
-                        <option value="LE">LE (レジェンドエディション: 0.15%)</option>
-                        <option value="UR">UR (ウルトラレア: 0.5%)</option>
-                        <option value="SSR">SSR (スペシャルスーパー: 3.8%)</option>
-                        <option value="SR">SR (スーパーレア: 10.5%)</option>
-                        <option value="R">R (レア: 20%)</option>
-                        <option value="N" selected>N (ノーマル: 50%)</option>
-                        <option value="C">C (コモン/ネタ枠: 15%)</option>
+                        <option value="SLR">SLR (0.01%)</option>
+                        <option value="LR">LR (0.04%)</option>
+                        <option value="LE">LE (0.15%)</option>
+                        <option value="UR">UR (0.5%)</option>
+                        <option value="SSR">SSR (3.8%)</option>
+                        <option value="SR">SR (10.5%)</option>
+                        <option value="R">R (20%)</option>
+                        <option value="N" selected>N (50%)</option>
+                        <option value="C">C (15%)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -106,6 +108,7 @@
             </div>
         </section>
 
+        <!-- 🎰 3. ガチャを引く画面 -->
         <section id="view-gacha" class="view">
             <div class="gacha-banner">
                 <div class="gacha-pickup-text" id="gacha-screen-status">最高レアを引き当てろ！</div>
@@ -118,12 +121,13 @@
             <button id="btn-share-pull-result" class="btn btn-share w-full hidden" style="margin-bottom: 15px;" onclick="sharePullResult()">📋 今回のガチャ結果をコピー</button>
 
             <div class="gacha-controls" id="gacha-action-controls">
-                <button id="btn-pull-1" class="btn btn-gacha">単発 (💎30)</button>
-                <button id="btn-pull-10" class="btn btn-gacha-10">10連 (💎300)</button>
+                <button id="btn-pull-1" class="btn btn-gacha" onclick="pullGacha(1)">単発 (💎30)</button>
+                <button id="btn-pull-10" class="btn btn-gacha-10" onclick="pullGacha(10)">10連 (💎300)</button>
             </div>
             <div class="ticket-controls" id="ticket-action-controls"></div>
         </section>
 
+        <!-- 📖 4. 図鑑 (ミュージアム) 画面 -->
         <section id="view-collection" class="view">
             <div class="collection-header">
                 <select id="collection-gacha-selector" class="form-input"></select>
@@ -138,34 +142,33 @@
             <div id="collection-grid" class="collection-grid"></div>
         </section>
 
+        <!-- ⚙️ 5. アプリ設定画面 -->
         <section id="view-settings" class="view space-y">
             <div class="panel">
                 <h2 class="panel-title">🎨 アプリのテーマ着せ替え</h2>
-                <div class="form-group">
-                    <select id="theme-selector" class="form-input" onchange="changeAppTheme(this.value)">
-                        <option value="theme-stylish">🤍 スタイリッシュ (すりガラス透明感)</option>
-                        <option value="theme-cute">🌸 ポップ＆キュート (パステルふんわり)</option>
-                        <option value="theme-gaming">🎮 ゲーミング (ダーク＆ネオン発光)</option>
-                        <option value="theme-glitter">✨ マグネットグリッター (光動くラメツヤ)</option>
-                    </select>
-                </div>
+                <select id="theme-selector" class="form-input" onchange="changeAppTheme(this.value)">
+                    <option value="theme-stylish">🤍 スタイリッシュ (すりガラス透明感)</option>
+                    <option value="theme-cute">🌸 ポップ＆キュート (パステルふんわり)</option>
+                    <option value="theme-gaming">🎮 ゲーミング (ダーク＆ネオン発光)</option>
+                </select>
             </div>
 
+            <!-- 🎨 カスタムカラーパネル（部位変更版） -->
             <div class="panel" id="color-custom-panel">
                 <h2 class="panel-title">🎨 選択中テーマのカラーカスタム</h2>
                 <p style="font-size: 11px; opacity:0.7; margin-bottom:12px; font-weight:bold;">このテーマのカラーを自分好みに変更できます</p>
                 <div class="color-picker-grid">
                     <div class="color-picker-row">
-                        <label>背景の色</label>
+                        <label>全体の背景色</label>
                         <input type="color" id="custom-color-bg" onchange="updateCustomColor('bg', this.value)">
                     </div>
                     <div class="color-picker-row">
-                        <label>文字の色</label>
-                        <input type="color" id="custom-color-text" onchange="updateCustomColor('text', this.value)">
+                        <label>パネルの背景色</label>
+                        <input type="color" id="custom-color-panel" onchange="updateCustomColor('panel', this.value)">
                     </div>
                     <div class="color-picker-row">
-                        <label>ボタン・主役色</label>
-                        <input type="color" id="custom-color-primary" onchange="updateCustomColor('primary', this.value)">
+                        <label>アクセント（ボタン等）</label>
+                        <input type="color" id="custom-color-accent" onchange="updateCustomColor('accent', this.value)">
                     </div>
                 </div>
                 <button onclick="resetCurrentThemeColors()" class="btn btn-outline w-full" style="margin-top:12px; padding:8px; font-size:11px;">このテーマの色を初期状態に戻す</button>
@@ -177,14 +180,6 @@
                     <label>画像を選ぶ</label>
                     <input type="file" id="settings-welcome-img" accept="image/*" class="form-input file-input" onchange="saveWelcomeImage(event)">
                 </div>
-                <div class="form-group">
-                    <label>表示時間</label>
-                    <select id="settings-splash-time" class="form-input" onchange="saveSplashTime(this.value)">
-                        <option value="500">サクッと (0.5秒)</option>
-                        <option value="1200" selected>普通 (1.2秒)</option>
-                        <option value="2500">じっくり (2.5秒)</option>
-                    </select>
-                </div>
                 <div id="welcome-img-preview-container" class="hidden text-center">
                     <img id="welcome-img-preview" class="img-preview" src="">
                     <button onclick="clearWelcomeImage()" class="btn-text-danger">画像を消去する</button>
@@ -192,30 +187,29 @@
             </div>
 
             <div class="panel">
-                <h2 class="panel-title">🔑 パスワードの変更</h2>
-                <div class="form-group">
-                    <input type="password" id="settings-password" class="form-input" placeholder="新しい4桁の数字">
-                </div>
-                <button onclick="savePasswordOnly()" class="btn btn-outline w-full">パスワードを変更</button>
-            </div>
-
-            <div class="panel">
-                <h2 class="panel-title">☁️ クラウド同期・バックアップ (GAS)</h2>
+                <h2 class="panel-title">☁️ クラウド連携 (GAS)</h2>
+                <p style="font-size: 11px; opacity:0.7; margin-bottom:10px; font-weight:bold;">※サプライズシェアを利用するにはGASのURL登録が必須です。</p>
                 <div class="form-group">
                     <input type="text" id="gas-url" class="form-input text-xs" placeholder="GASのURLを貼り付け">
                 </div>
-                <div class="button-group">
-                    <button onclick="saveGasUrl()" class="btn btn-outline" style="font-size:12px;">URL保存</button>
-                    <button onclick="triggerManualSync()" class="btn btn-share" style="font-size:12px;">☁️ 手動バックアップ</button>
-                </div>
-                <label class="flex-row-label">
-                    <input type="checkbox" id="settings-auto-sync" onchange="toggleAutoSync(this.checked)"> 操作時に自動バックアップを行う
-                </label>
+                <button onclick="saveGasUrl()" class="btn btn-outline w-full" style="font-size:12px;">URLを保存</button>
             </div>
         </section>
 
     </main>
 
+    <!-- 🌟 サプライズガチャ受け取りモーダル -->
+    <div id="modal-surprise" class="modal hidden">
+        <div class="modal-content">
+            <h2>🎁 サプライズガチャ到着！</h2>
+            <p>お友達から特別なガチャが届きました！<br>今すぐ引いてみましょう！</p>
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button id="btn-surprise-open" class="btn btn-primary">ガチャを開封する！</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌟 モーダル群 -->
     <div id="modal-card-detail" class="modal hidden">
         <div class="modal-content">
             <div id="modal-card-rarity" class="modal-rarity"></div>
@@ -233,17 +227,7 @@
         </div>
     </div>
 
-    <div id="modal-import" class="modal hidden">
-        <div class="modal-content">
-            <h2>🎁 ガチャが届きました！</h2>
-            <p>お友達から新しいガチャデータを受け取りました。追加しますか？</p>
-            <div class="modal-actions">
-                <button id="btn-import-yes" class="btn btn-primary">インポートする！</button>
-                <button id="btn-import-no" class="btn btn-outline">やめる</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- 📱 下部ナビゲーション -->
     <nav class="bottom-nav">
         <button class="nav-btn active" data-target="view-home"><span class="icon">🏠</span><br><span class="label">ホーム</span></button>
         <button class="nav-btn" data-target="view-admin"><span class="icon">⚙️</span><br><span class="label">作る</span></button>
